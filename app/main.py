@@ -1,13 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routers import auth, rooms, bookings
 
 
 app = FastAPI(
-    title="Room Service",
-    description="Meeting room service",
-    version="1.0",
+    title="Meeting Room Booking Service",
+    description="Service for booking meeting rooms in coworking space",
+    version="1.0.0",
+    swagger_ui_parameters={
+        "persistAuthorization": True,
+    }
 )
 
+app.include_router(auth.router)
+app.include_router(rooms.router)
+app.include_router(bookings.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,3 +37,4 @@ async def root():
         "version": "1.0",
         "endpoints": ["/healthcheck", "/auth/login", "rooms", "/bookings"]
     }
+
